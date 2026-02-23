@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Readiness Assessment — Linktank</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0F2444;
+    --navy-mid: #1B3A6B;
+    --teal: #0B7285;
+    --teal-light: #12A6C2;
+    --accent: #E67E22;
+    --light-bg: #F4F8FB;
+    --card-bg: #FFFFFF;
+    --text: #1A2332;
+    --muted: #6B7A90;
+    --border: #D8E4EE;
+    --green: #1A7A4E;
+    --green-light: #D4EDDA;
+    --amber: #B7720A;
+    --amber-light: #FFF3CD;
+    --red: #A33020;
+    --red-light: #FADBD8;
+    --score1: #FADBD8; --score2: #FDEBD0; --score3: #FEF9E7; --score4: #D5F5E3; --score5: #A9DFBF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light-bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(15,36,68,0.3);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 0.04em;
+  }
+  .logo span { color: var(--teal-light); }
+  .header-badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--teal) 100%);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--teal-light);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.75);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+
+  /* ── PRACTICE INFO FORM ── */
+  .intake-section {
+    max-width: 800px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(15,36,68,0.07);
+  }
+  .card-header {
+    background: var(--navy);
+    padding: 1.25rem 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .card-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .card-header .step-badge {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+  }
+  .card-body { padding: 1.75rem; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .form-group input, .form-group select {
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--light-bg);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--teal);
+    background: #fff;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem 1rem;
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+  .progress-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--navy-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .progress-count {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .progress-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    border-radius: 99px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ── DOMAIN SECTIONS ── */
+  .domain-section {
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1.5rem;
+  }
+
+  .domain-header {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .domain-num {
+    background: var(--navy);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    width: 70px;
+    min-width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .domain-info {
+    background: var(--navy-mid);
+    flex: 1;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .domain-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+  }
+  .domain-weight {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .domain-desc {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.25rem;
+    line-height: 1.5;
+  }
+
+  /* ── QUESTION CARDS ── */
+  .question-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(15,36,68,0.05);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .question-card.answered {
+    border-color: var(--teal);
+    box-shadow: 0 2px 12px rgba(11,114,133,0.12);
+  }
+  .question-top {
+    padding: 1.1rem 1.25rem 0.9rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .q-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.78rem;
+    color: var(--teal);
+    background: rgba(11,114,133,0.1);
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 0.1rem;
+  }
+  .q-text {
+    font-weight: 500;
+    font-size: 0.97rem;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .q-note {
+    margin: 0 1.25rem 0.9rem;
+    padding: 0.6rem 0.8rem;
+    background: rgba(230,126,34,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.82rem;
+    color: var(--amber);
+    line-height: 1.5;
+  }
+
+  /* ── SCORE OPTIONS ── */
+  .score-options {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .score-opt {
+    cursor: pointer;
+    text-align: center;
+    padding: 0.7rem 0.3rem;
+    border-right: 1px solid var(--border);
+    transition: background 0.15s;
+    position: relative;
+    user-select: none;
+  }
+  .score-opt:last-child { border-right: none; }
+  .score-opt input[type="radio"] { display: none; }
+  .score-opt .score-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--muted);
+    transition: color 0.15s;
+  }
+  .score-opt .score-desc {
+    font-size: 0.68rem;
+    color: var(--muted);
+    line-height: 1.3;
+    display: block;
+    transition: color 0.15s;
+  }
+  .score-opt[data-score="1"] { background: #fdf5f4; }
+  .score-opt[data-score="2"] { background: #fdf8f2; }
+  .score-opt[data-score="3"] { background: #fffef0; }
+  .score-opt[data-score="4"] { background: #f4fdf7; }
+  .score-opt[data-score="5"] { background: #eaf9f1; }
+
+  .score-opt.selected[data-score="1"] { background: var(--score1); }
+  .score-opt.selected[data-score="2"] { background: var(--score2); }
+  .score-opt.selected[data-score="3"] { background: var(--score3); }
+  .score-opt.selected[data-score="4"] { background: var(--score4); }
+  .score-opt.selected[data-score="5"] { background: var(--score5); }
+  .score-opt.selected .score-num { color: var(--navy); }
+  .score-opt.selected .score-desc { color: var(--text); }
+  .score-opt.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 0.7rem;
+    color: var(--green);
+    font-weight: 700;
+  }
+  .score-opt:hover:not(.selected) { filter: brightness(0.96); }
+
+  /* Tooltip on hover for full descriptor */
+  .score-full {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    color: #fff;
+    font-size: 0.78rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    width: 220px;
+    line-height: 1.4;
+    z-index: 50;
+    pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .score-full::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--navy);
+  }
+  .score-opt:hover .score-full { display: block; }
+
+  /* ── SUBMIT BUTTON ── */
+  .submit-section {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 1.1rem 2rem;
+    background: linear-gradient(135deg, var(--navy-mid), var(--teal));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 6px 24px rgba(11,114,133,0.3);
+    text-transform: uppercase;
+  }
+  .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .validation-msg {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--red);
+    text-align: center;
+    display: none;
+  }
+
+  /* ── REPORT ── */
+  #report { display: none; }
+
+  .report-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--teal) 100%);
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .report-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .report-hero-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--teal-light);
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .report-hero h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+  .report-hero .practice-name {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.7);
+    position: relative;
+  }
+
+  .report-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Overall score dial */
+  .score-dial-section {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    box-shadow: 0 4px 24px rgba(15,36,68,0.07);
+  }
+  .dial-wrap {
+    position: relative;
+    width: 160px;
+    min-width: 160px;
+    height: 160px;
+  }
+  .dial-wrap svg { width: 160px; height: 160px; }
+  .dial-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .dial-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .dial-pct { font-size: 1rem; color: var(--muted); font-weight: 500; }
+  .dial-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+  }
+  .dial-info .band-desc {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+  .band-pill {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  /* Domain breakdown */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--teal);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .domain-result-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 8px rgba(15,36,68,0.04);
+  }
+  .domain-result-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .domain-result-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .domain-result-score {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .domain-bar {
+    height: 10px;
+    background: var(--light-bg);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .domain-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 1s ease;
+  }
+  .domain-result-meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* Traffic lights */
+  .traffic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .traffic-item {
+    background: var(--card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 1rem;
+    text-align: center;
+  }
+  .traffic-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin: 0 auto 0.5rem;
+  }
+  .traffic-dot.green { background: var(--green); }
+  .traffic-dot.amber { background: #F0A500; }
+  .traffic-dot.red { background: #C0392B; }
+  .traffic-label { font-size: 0.8rem; font-weight: 600; }
+  .traffic-desc { font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem; line-height: 1.4; }
+
+  /* Next steps */
+  .next-steps-card {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+  }
+  .next-steps-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--teal-light);
+  }
+  .next-step-item {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+  }
+  .step-icon {
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    color: #fff;
+    margin-top: 0.1rem;
+  }
+  .step-text { font-size: 0.9rem; line-height: 1.5; color: rgba(255,255,255,0.85); }
+
+  /* CTA */
+  .cta-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 2px solid var(--teal);
+    padding: 1.75rem;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(11,114,133,0.12);
+  }
+  .cta-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+  .cta-card p { font-size: 0.95rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .cta-details {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    color: var(--teal);
+    font-weight: 500;
+  }
+
+  /* Print / download */
+  .report-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1.5rem;
+  }
+  .btn-secondary {
+    flex: 1;
+    padding: 0.85rem;
+    background: var(--card-bg);
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .btn-secondary:hover { border-color: var(--teal); background: var(--light-bg); }
+  .btn-secondary.primary-action {
+    background: var(--teal);
+    color: #fff;
+    border-color: var(--teal);
+  }
+  .btn-secondary.primary-action:hover { background: var(--teal-light); border-color: var(--teal-light); }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .score-dial-section { flex-direction: column; text-align: center; }
+    .traffic-grid { grid-template-columns: 1fr; }
+    .score-options { grid-template-columns: repeat(5,1fr); }
+    .score-opt .score-desc { display: none; }
+    .domain-info { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media print {
+    .site-header, .hero, .intake-section, #questionnaire, .report-actions { display: none !important; }
+    #report { display: block !important; }
+    .report-hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { background: white; }
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeInUp 0.5s ease forwards; }
+  .animate-in:nth-child(2) { animation-delay: 0.1s; }
+  .animate-in:nth-child(3) { animation-delay: 0.2s; }
+
+  .answered-indicator {
+    display: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    min-width: 8px;
+    margin-top: 0.45rem;
+  }
+  .question-card.answered .answered-indicator { display: block; }
+
+  .confidential-bar {
+    background: #fff3cd;
+    border-bottom: 1px solid #ffc107;
+    padding: 0.5rem 1.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--amber);
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">LINK<span>TANK</span></div>
+  <div class="header-badge">Practice Intelligence Solutions</div>
+</header>
+<div class="confidential-bar">⚠️ This assessment is confidential — for authorised use only. Results should be reviewed by a qualified Linktank consultant.</div>
+
+<!-- QUESTIONNAIRE SECTION -->
+<div id="questionnaire">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">AI Readiness Assessment</div>
+    <h1>Is your practice ready<br>for safe AI adoption?</h1>
+    <p>Complete this assessment to understand where your practice stands, identify critical gaps, and receive a personalised AI implementation roadmap — all aligned to POPIA and FSP compliance requirements.</p>
+  </div>
+
+  <!-- INTAKE FORM -->
+  <div class="intake-section">
+    <div class="card">
+      <div class="card-header">
+        <span class="step-badge">STEP 1</span>
+        <h2>Practice Information</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Practice Name *</label>
+            <input type="text" id="practiceName" placeholder="e.g. Smith Financial Planning">
+          </div>
+          <div class="form-group">
+            <label>FSP Licence Number</label>
+            <input type="text" id="fspNumber" placeholder="e.g. FSP 12345">
+          </div>
+          <div class="form-group">
+            <label>Completed By *</label>
+            <input type="text" id="completedBy" placeholder="Full name">
+          </div>
+          <div class="form-group">
+            <label>Role / Title</label>
+            <input type="text" id="role" placeholder="e.g. Managing Director">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Number of Staff</label>
+            <select id="staffSize">
+              <option value="">Select range...</option>
+              <option>1–5 staff</option>
+              <option>6–15 staff</option>
+              <option>16–30 staff</option>
+              <option>31–50 staff</option>
+              <option>50+ staff</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Linktank Consultant</label>
+            <input type="text" id="consultant" placeholder="Consultant name (if applicable)">
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="assessDate">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-container">
+    <div class="progress-header">
+      <span class="progress-label">Assessment Progress</span>
+      <span class="progress-count" id="progressCount">0 of 29 questions answered</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS WILL BE INJECTED HERE -->
+  <div id="questions-container"></div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="btn-primary" id="submitBtn" onclick="generateReport()">
+      Generate My AI Readiness Report →
+    </button>
+    <div class="validation-msg" id="validationMsg">Please complete all questions and fill in Practice Name and Completed By fields before generating your report.</div>
+  </div>
+
+</div><!-- end #questionnaire -->
+
+<!-- REPORT SECTION -->
+<div id="report">
+  <div class="report-hero">
+    <div class="report-hero-label">AI Readiness Report</div>
+    <h2>AI Readiness Assessment Report</h2>
+    <div class="practice-name" id="reportPracticeName"></div>
+    <div class="practice-name" id="reportMeta" style="margin-top:0.25rem; font-size:0.85rem; opacity:0.6;"></div>
+  </div>
+
+  <div style="max-width:800px;margin:0 auto;padding:0 1.5rem;">
+    <div class="report-actions" style="padding:0;margin:1.5rem 0;">
+      <button class="btn-secondary" onclick="window.print()">🖨️ Print Report</button>
+      <button class="btn-secondary" onclick="restartAssessment()">↩ Start New Assessment</button>
+      <button class="btn-secondary primary-action" onclick="scrollToSection('cta-section')">📞 Contact Linktank</button>
+    </div>
+  </div>
+
+  <div class="report-content">
+
+    <!-- OVERALL SCORE -->
+    <div class="score-dial-section animate-in">
+      <div class="dial-wrap">
+        <svg viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="65" fill="none" stroke="#E8F4FB" stroke-width="14"/>
+          <circle cx="80" cy="80" r="65" fill="none" stroke="url(#scoreGrad)" stroke-width="14"
+            stroke-linecap="round" stroke-dasharray="408.41" stroke-dashoffset="408.41"
+            id="dialCircle" transform="rotate(-90 80 80)"/>
+          <defs>
+            <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#0B7285"/>
+              <stop offset="100%" style="stop-color:#12A6C2"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="dial-center">
+          <span class="dial-score" id="dialScore">0</span>
+          <span class="dial-pct">%</span>
+        </div>
+      </div>
+      <div class="dial-info">
+        <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.35rem;">Overall Readiness Score</div>
+        <h3 id="bandName">—</h3>
+        <div class="band-desc" id="bandDesc">—</div>
+        <span class="band-pill" id="bandPill"></span>
+      </div>
+    </div>
+
+    <!-- DOMAIN BREAKDOWN -->
+    <div class="section-title animate-in">📊 Domain Breakdown</div>
+    <div id="domainBreakdown" class="animate-in"></div>
+
+    <!-- TRAFFIC LIGHTS -->
+    <div class="section-title animate-in" style="margin-top:1.5rem;">🚦 Risk Summary</div>
+    <div class="traffic-grid animate-in" id="trafficGrid"></div>
+
+    <!-- NEXT STEPS -->
+    <div class="section-title animate-in">🗺️ Recommended Next Steps</div>
+    <div class="next-steps-card animate-in" id="nextStepsCard">
+      <h4 id="nextStepsTitle">Your Recommended Pathway</h4>
+      <div id="nextStepsList"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-card animate-in" id="cta-section">
+      <h4>Ready to take the next step?</h4>
+      <p>Contact Linktank to discuss your assessment results and build your personalised AI implementation roadmap. Our consultants understand the South African IFA landscape and regulatory environment.</p>
+      <div class="cta-details">
+        <span>🌐 www.linktank.co.za</span>
+        <span>📞 087 807 8500</span>
+        <span>✉️ info@linktank.co.za</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA: All 29 questions across 6 domains
+// ═══════════════════════════════════════════════════
+const domains = [
+  {
+    num: 1,
+    title: "Data Environment & Governance",
+    weight: 25,
+    desc: "AI safety in financial services begins with data. This domain assesses how well the practice understands, organises, and protects client data.",
+    questions: [
+      {
+        id: "q1",
+        text: "Where is client data currently stored?",
+        note: "Common unmanaged locations: WhatsApp chats, personal Gmail, desktop folders, local Excel files.",
+        scores: [
+          "Data is scattered across personal drives, emails, spreadsheets, and USB sticks with no clear structure.",
+          "Most data is in practice management software (e.g. Xplan) but significant amounts also exist in unmanaged locations.",
+          "Client data is primarily centralised in approved systems. Some shadow copies exist but are being addressed.",
+          "All client data is in approved, centrally managed systems. Clear policies govern where data may be stored.",
+          "Fully centralised cloud-based or on-premise environment with enforced data storage policies and audit trails."
+        ]
+      },
+      {
+        id: "q2",
+        text: "Has client data been formally classified (e.g. personal information, sensitive information, operational data)?",
+        note: "POPIA defines 'personal information' broadly. AI tools that process unclassified data create unpredictable compliance exposure.",
+        scores: [
+          "No classification has been done. All data is treated the same way.",
+          "Some awareness of what constitutes personal information but no formal classification process exists.",
+          "Informal classification exists. Staff generally know which data is sensitive but it is not formally documented.",
+          "A data classification framework exists and has been applied to most data categories.",
+          "Comprehensive, documented data classification is in place, aligned to POPIA definitions, with regular reviews."
+        ]
+      },
+      {
+        id: "q3",
+        text: "Are role-based access controls (RBAC) in place — meaning staff can only access the data they need for their role?",
+        note: "When AI tools are introduced, they inherit the access rights of the user or integration account — weak RBAC means AI can access far more than it should.",
+        scores: [
+          "No access controls. Everyone has access to everything.",
+          "Basic password protection only. No role-based differentiation.",
+          "Some access controls exist in the practice management system but not consistently across all data.",
+          "RBAC is implemented across primary systems. Access is reviewed periodically.",
+          "Comprehensive RBAC across all systems with automated provisioning/de-provisioning and regular access audits."
+        ]
+      },
+      {
+        id: "q4",
+        text: "Does the practice have documented data retention and deletion policies?",
+        note: null,
+        scores: [
+          "No retention or deletion policies exist. Data is kept indefinitely.",
+          "An informal understanding exists ('we keep records for 5 years') but nothing is documented.",
+          "A documented policy exists but is not consistently applied or enforced.",
+          "Documented, applied retention policies aligned to FAIS/FICA record-keeping requirements.",
+          "Fully documented, enforced, and audited data lifecycle policies including secure deletion procedures."
+        ]
+      },
+      {
+        id: "q5",
+        text: "Has the practice registered an Information Officer with the Information Regulator as required by POPIA?",
+        note: "POPIA registration is a legal requirement, not optional. Any AI deployment without it creates immediate regulatory exposure.",
+        scores: [
+          "Not aware of this requirement.",
+          "Aware but not yet actioned.",
+          "Registration is in progress.",
+          "Information Officer is registered. Basic POPIA compliance framework is in place.",
+          "Registered Information Officer, deputy officer, PAIA manual, privacy policy, and staff training all in place."
+        ]
+      },
+      {
+        id: "q6",
+        text: "Does the practice have a documented incident response plan for data breaches?",
+        note: "AI tools increase data processing activity and therefore breach risk. The Information Regulator must be notified within 72 hours of a breach.",
+        scores: [
+          "No plan exists. A breach would be handled ad hoc.",
+          "Informal awareness of what to do but nothing documented.",
+          "A basic plan exists but has not been tested or communicated to staff.",
+          "Documented plan exists, staff are aware, and it has been reviewed in the last 12 months.",
+          "Tested, documented plan with clear notification procedures to the Information Regulator within the 72-hour requirement."
+        ]
+      }
+    ]
+  },
+  {
+    num: 2,
+    title: "Technology Infrastructure",
+    weight: 20,
+    desc: "The safety of any AI deployment depends on the underlying technology environment — security posture, cloud maturity, and IT support.",
+    questions: [
+      {
+        id: "q7",
+        text: "What is the practice's primary technology environment?",
+        note: "Microsoft Azure OpenAI and Microsoft Copilot are the safest AI paths for most IFAs — they require an M365 or Azure foundation.",
+        scores: [
+          "Predominantly on-premise servers or local machines with minimal cloud usage.",
+          "Mixed environment — some cloud adoption (email, maybe OneDrive) but primary systems are on-premise.",
+          "Primarily cloud-based (Microsoft 365, Google Workspace) but some legacy on-premise systems remain.",
+          "Fully cloud-based on a major platform (Microsoft 365 / Google Workspace) with managed security controls.",
+          "Fully cloud-based on Microsoft 365 or Azure with enterprise-grade security, conditional access, and compliance features active."
+        ]
+      },
+      {
+        id: "q8",
+        text: "Is Multi-Factor Authentication (MFA) enforced for all staff accounts?",
+        note: "MFA is the single most effective control against account compromise. AI tools connected to accounts without MFA are a significant risk.",
+        scores: [
+          "No MFA. Usernames and passwords only.",
+          "MFA available but optional — not all staff use it.",
+          "MFA enforced for some accounts (e.g. admin only) but not all staff.",
+          "MFA enforced for all staff on primary systems.",
+          "MFA enforced everywhere with conditional access policies and phishing-resistant authentication methods."
+        ]
+      },
+      {
+        id: "q9",
+        text: "How is endpoint security managed across practice devices?",
+        note: null,
+        scores: [
+          "No managed endpoint protection. Staff use personal devices with no controls.",
+          "Basic antivirus on some machines. No centralised management.",
+          "Antivirus/EDR on all practice devices but not centrally managed or monitored.",
+          "Centrally managed endpoint protection with regular updates and monitoring.",
+          "Enterprise endpoint management (e.g. Microsoft Intune/Defender for Endpoint) with device compliance policies enforced."
+        ]
+      },
+      {
+        id: "q10",
+        text: "Does the practice have a reliable, documented IT support arrangement?",
+        note: "AI deployment requires ongoing support. A practice without reliable IT support will struggle to maintain AI tools safely.",
+        scores: [
+          "No formal IT support. Issues are handled by whoever is available.",
+          "Ad hoc support from a friend/family member or occasional IT contractor.",
+          "Regular IT contractor who is familiar with the environment.",
+          "Managed IT service provider (MSP) with defined SLAs.",
+          "MSP with defined SLAs, proactive monitoring, and documented security responsibilities."
+        ]
+      },
+      {
+        id: "q11",
+        text: "Does the practice perform regular data backups, and have they been tested?",
+        note: null,
+        scores: [
+          "No regular backups.",
+          "Backups happen but inconsistently. Never been tested.",
+          "Regular automated backups but restores have never been tested.",
+          "Regular automated backups that have been tested successfully.",
+          "Regular automated backups with documented recovery procedures, tested restores, and offsite/cloud copies."
+        ]
+      }
+    ]
+  },
+  {
+    num: 3,
+    title: "Regulatory & Compliance Awareness",
+    weight: 20,
+    desc: "This domain assesses whether the practice understands how AI intersects with POPIA, FAIS, FICA, and FSB/FSCA obligations.",
+    questions: [
+      {
+        id: "q12",
+        text: "Has the practice reviewed its POPIA compliance in the context of AI data processing?",
+        note: "Under POPIA, AI tools that process personal information are 'operators' — the practice as 'responsible party' remains liable for how that data is used.",
+        scores: [
+          "No POPIA review has been done at all.",
+          "A general POPIA review was done but AI was not specifically considered.",
+          "Aware that AI introduces new processing activities under POPIA but no formal review conducted.",
+          "A review has identified how AI tools would process personal information and what conditions apply.",
+          "Formal POPI Act assessment completed with legal review, updated processing register, and consent frameworks that specifically address AI."
+        ]
+      },
+      {
+        id: "q13",
+        text: "Do client agreements and consent forms address the use of technology tools and data processing?",
+        note: null,
+        scores: [
+          "Standard FSP engagement letter only. No specific data consent.",
+          "Basic data consent included but not specific to technology or third-party processing.",
+          "Data processing consent exists but does not specifically contemplate AI or automated processing.",
+          "Updated consent framework that includes technology processing and third-party data sharing.",
+          "Comprehensive consent framework reviewed by legal, covering AI processing, automated decision-making, and client rights under POPIA."
+        ]
+      },
+      {
+        id: "q14",
+        text: "Has the practice assessed whether AI-assisted advice or recommendations would affect its FSP licence conditions?",
+        note: "The FSCA has been increasingly vocal about AI governance in financial services. Accountability for advice remains with the FSP even when AI assists.",
+        scores: [
+          "No awareness that AI could affect FSP licence conditions.",
+          "Aware of the question but no assessment done.",
+          "Informal discussions with compliance officer but no formal assessment.",
+          "Compliance review conducted with guidance on what AI can and cannot do within licence conditions.",
+          "Formal legal/compliance opinion obtained on AI use within FSP context, including accountability for AI-assisted recommendations."
+        ]
+      },
+      {
+        id: "q15",
+        text: "Does the practice have an Acceptable Use Policy (AUP) for technology and internet use?",
+        note: null,
+        scores: [
+          "No AUP exists.",
+          "An informal policy exists but is not documented.",
+          "A documented AUP exists but does not address AI tools.",
+          "A documented AUP exists that has been updated to address AI tool usage.",
+          "Comprehensive AUP covering AI tools, personal device use, cloud storage, and consequences for non-compliance — signed by all staff."
+        ]
+      },
+      {
+        id: "q16",
+        text: "Are FICA/AML obligations being met, and has the practice considered how AI might affect its FICA processes?",
+        note: null,
+        scores: [
+          "FICA compliance is not well managed. Significant gaps exist.",
+          "FICA processes are in place but manual and inconsistent.",
+          "FICA processes are reasonably well managed but AI impact has not been considered.",
+          "FICA processes are well managed. AI impact has been considered but not yet addressed.",
+          "Strong FICA compliance with documented procedures. AI tools have been assessed for FICA implications and appropriate controls are planned."
+        ]
+      }
+    ]
+  },
+  {
+    num: 4,
+    title: "Business Process & Use Case Clarity",
+    weight: 15,
+    desc: "AI delivers the most value when applied to specific, well-understood processes. This domain assesses use case clarity and change management capacity.",
+    questions: [
+      {
+        id: "q17",
+        text: "Has the practice identified specific processes that AI could improve?",
+        note: "High-value IFA use cases: drafting client communication from CRM notes, summarising meeting recordings, generating report narratives from Power BI, compliance document generation, and answering policy queries against internal knowledge bases.",
+        scores: [
+          "No specific use cases identified. Interest in AI is general rather than applied.",
+          "General areas identified (e.g. 'admin', 'reports') but no specific processes mapped.",
+          "A few specific processes identified but not formally prioritised or scoped.",
+          "A prioritised list of AI use cases exists with a basic business case for each.",
+          "A structured AI use case register exists with prioritisation criteria, expected outcomes, and measurable success metrics."
+        ]
+      },
+      {
+        id: "q18",
+        text: "How well-documented are the practice's key business processes?",
+        note: "AI tools augment existing processes — they cannot replace or fix undocumented ones. Good process documentation is a prerequisite for effective AI integration.",
+        scores: [
+          "Processes exist in people's heads only. No documentation.",
+          "Some processes are documented informally (notes, emails, shared drives).",
+          "Key processes are documented but inconsistently applied.",
+          "Most key processes are formally documented and followed consistently.",
+          "Comprehensive process documentation exists, is version-controlled, and staff are trained on it."
+        ]
+      },
+      {
+        id: "q19",
+        text: "Has the practice successfully adopted new technology tools in the last three years?",
+        note: null,
+        scores: [
+          "Technology adoption has largely failed. Staff resist change.",
+          "Some tools have been adopted with difficulty. Low usage rates common.",
+          "Technology adoption has been mixed — some successes, some failures.",
+          "Most technology adoptions in recent years have been successful with reasonable uptake.",
+          "Strong track record of technology adoption with high uptake, clear change management processes, and measurable outcomes."
+        ]
+      },
+      {
+        id: "q20",
+        text: "Does the practice track key performance metrics that AI could enhance or report on?",
+        note: null,
+        scores: [
+          "No meaningful KPIs or metrics tracked beyond basic financials.",
+          "Some metrics tracked informally. No structured reporting.",
+          "Key metrics tracked in spreadsheets or basic reports. Inconsistent.",
+          "Structured reporting on key metrics with regular management review.",
+          "Comprehensive BI/MI reporting (e.g. Power BI dashboards) with regular review cycles — AI could directly enhance reporting narratives."
+        ]
+      },
+      {
+        id: "q21",
+        text: "Is there a designated person or team responsible for technology and innovation within the practice?",
+        note: null,
+        scores: [
+          "No one is responsible for technology. It is managed reactively.",
+          "Technology falls to whoever has time. No defined owner.",
+          "One person manages technology but it is not a formal role.",
+          "A defined technology lead exists with authority to evaluate and implement new tools.",
+          "Dedicated technology/innovation function or role with budget, mandate, and executive support."
+        ]
+      }
+    ]
+  },
+  {
+    num: 5,
+    title: "People & Culture",
+    weight: 10,
+    desc: "The greatest AI risk in most practices is staff using consumer AI tools with client data without policy or oversight.",
+    questions: [
+      {
+        id: "q22",
+        text: "Are staff currently using consumer AI tools (ChatGPT, Google Gemini, etc.) for work purposes?",
+        note: "⚠️ If staff are already using ChatGPT with client data, there is an active compliance breach that needs to be addressed regardless of the AI readiness score.",
+        scores: [
+          "Yes, widely — with no policy, no oversight, and likely with client data.",
+          "Probably yes, but no one has asked or investigated.",
+          "Likely some use, but a conversation has been had and staff are aware of risks.",
+          "A policy exists and staff have been briefed. Informal use has been addressed.",
+          "Formal policy in place, staff trained, and approved tools are available so there is no need for unsanctioned alternatives."
+        ]
+      },
+      {
+        id: "q23",
+        text: "How would you describe the overall digital literacy of the practice's staff?",
+        note: null,
+        scores: [
+          "Low. Many staff struggle with basic technology. Significant training needed for any new tool.",
+          "Below average. Adoption of new technology is slow and requires significant support.",
+          "Average. Staff manage standard tools competently but new tools require structured training.",
+          "Above average. Staff adapt to new technology reasonably well with standard training.",
+          "High. Staff are confident technology users who actively seek out and adopt new tools."
+        ]
+      },
+      {
+        id: "q24",
+        text: "Does leadership actively champion technology adoption and innovation?",
+        note: null,
+        scores: [
+          "Leadership is resistant to technology change. Preference for 'the way we've always done it'.",
+          "Leadership is neutral. Technology decisions are delegated without real engagement.",
+          "Leadership is open to technology but not actively championing it.",
+          "Leadership visibly supports technology initiatives and participates in adoption.",
+          "Leadership actively drives technology strategy, allocates budget, and models adoption behaviour."
+        ]
+      },
+      {
+        id: "q25",
+        text: "Is there an identified AI champion or early adopter within the practice who is enthusiastic about AI?",
+        note: null,
+        scores: [
+          "No one is interested or enthusiastic about AI.",
+          "General curiosity but no one taking the lead.",
+          "One or two people are interested but have no formal mandate.",
+          "An informal champion exists and is actively experimenting with approved tools.",
+          "A designated AI champion with leadership support, time allocation, and a mandate to evaluate and pilot AI tools."
+        ]
+      }
+    ]
+  },
+  {
+    num: 6,
+    title: "Vendor & Budget Readiness",
+    weight: 10,
+    desc: "Safe AI implementation requires investment in tools, integration, training, and ongoing governance.",
+    questions: [
+      {
+        id: "q26",
+        text: "Does the practice have a defined budget for technology investment in the next 12 months?",
+        note: null,
+        scores: [
+          "No technology budget. Spend is completely reactive.",
+          "An informal allocation exists but is not formally budgeted.",
+          "A general IT/technology budget exists but AI has not been specifically considered.",
+          "AI investment has been specifically discussed at management level and a budget range is in mind.",
+          "A defined AI investment budget has been approved with clear allocation across tools, implementation, and training."
+        ]
+      },
+      {
+        id: "q27",
+        text: "Does the practice have an existing Microsoft 365 subscription?",
+        note: "Microsoft 365 Business Premium is the recommended entry point for safe AI deployment via Microsoft Copilot. It includes the security and compliance features needed to govern AI tool use.",
+        scores: [
+          "No Microsoft 365. Using free/consumer Microsoft products or Google Workspace.",
+          "Basic Microsoft 365 (e.g. Business Basic) without advanced security features.",
+          "Microsoft 365 Business Standard or similar — reasonable foundation but Copilot not yet available.",
+          "Microsoft 365 Business Premium or equivalent — security and compliance features available.",
+          "Microsoft 365 E3/E5 or Business Premium with active Purview, Defender, and Copilot licensing in place or planned."
+        ]
+      },
+      {
+        id: "q28",
+        text: "Does the practice have existing relationships with technology vendors who could support AI adoption?",
+        note: null,
+        scores: [
+          "No relevant vendor relationships. Would be starting from scratch.",
+          "Basic vendor relationships (IT support, software reseller) but no AI expertise in the network.",
+          "Relationships with vendors who have some AI knowledge but no proven delivery capability.",
+          "One or more vendors with demonstrated AI implementation experience in financial services.",
+          "Trusted implementation partner (such as Linktank) with a proven AI readiness and implementation methodology."
+        ]
+      },
+      {
+        id: "q29",
+        text: "What is the practice's expected timeline for beginning AI implementation?",
+        note: null,
+        scores: [
+          "No timeline. AI is a vague future idea.",
+          "Longer than 18 months. Still in exploration phase.",
+          "12 to 18 months. Investigating options before committing.",
+          "6 to 12 months. Ready to begin structured planning now.",
+          "Within 6 months. Decision has been made — focused on doing it safely and correctly."
+        ]
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════
+// BUILD QUESTIONNAIRE UI
+// ═══════════════════════════════════════════════════
+const answers = {};
+
+function buildQuestionnaire() {
+  const container = document.getElementById('questions-container');
+  let globalQ = 0;
+
+  domains.forEach(domain => {
+    const section = document.createElement('div');
+    section.className = 'domain-section';
+
+    // Domain header
+    section.innerHTML = `
+      <div class="domain-header">
+        <div class="domain-num">${domain.num}</div>
+        <div class="domain-info">
+          <div>
+            <div class="domain-info"><h3>${domain.title}</h3></div>
+            <div class="domain-desc">${domain.desc}</div>
+          </div>
+          <div class="domain-weight">${domain.weight}%</div>
+        </div>
+      </div>
+    `;
+
+    // Questions
+    domain.questions.forEach(q => {
+      globalQ++;
+      const qNum = globalQ;
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.id = `card-${q.id}`;
+
+      const shortLabels = ["Not started", "Early stage", "Developing", "Established", "Best practice"];
+
+      let optionsHtml = '';
+      for (let s = 1; s <= 5; s++) {
+        optionsHtml += `
+          <label class="score-opt" data-score="${s}" data-qid="${q.id}" onclick="selectScore('${q.id}', ${s}, this)">
+            <input type="radio" name="${q.id}" value="${s}">
+            <span class="score-num">${s}</span>
+            <span class="score-desc">${shortLabels[s-1]}</span>
+            <div class="score-full">${q.scores[s-1]}</div>
+          </label>`;
+      }
+
+      card.innerHTML = `
+        <div class="question-top">
+          <div class="answered-indicator"></div>
+          <span class="q-num">Q${qNum}</span>
+          <span class="q-text">${q.text}</span>
+        </div>
+        ${q.note ? `<div class="q-note">💡 ${q.note}</div>` : ''}
+        <div class="score-options">${optionsHtml}</div>
+      `;
+
+      section.appendChild(card);
+    });
+
+    container.appendChild(section);
+  });
+}
+
+function selectScore(qId, score, el) {
+  answers[qId] = score;
+
+  // Update UI
+  const card = document.getElementById(`card-${qId}`);
+  card.classList.add('answered');
+  card.querySelectorAll('.score-opt').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+  el.classList.add('selected');
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = 29;
+  const answered = Object.keys(answers).length;
+  const pct = (answered / total) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressCount').textContent = `${answered} of ${total} questions answered`;
+}
+
+// ═══════════════════════════════════════════════════
+// SCORING ENGINE
+// ═══════════════════════════════════════════════════
+function calcScores() {
+  const domainScores = {};
+  let totalWeighted = 0;
+
+  domains.forEach(domain => {
+    const qs = domain.questions;
+    let rawSum = 0;
+    let maxRaw = qs.length * 5;
+    qs.forEach(q => {
+      rawSum += answers[q.id] || 0;
+    });
+    const pct = (rawSum / maxRaw) * 100;
+    const weighted = pct * (domain.weight / 100);
+    domainScores[domain.num] = { raw: rawSum, max: maxRaw, pct: Math.round(pct), weighted };
+    totalWeighted += weighted;
+  });
+
+  return { domainScores, overall: Math.round(totalWeighted) };
+}
+
+function getBand(score) {
+  if (score <= 40) return {
+    name: "Foundation Stage",
+    desc: "Significant groundwork is needed before any AI can be safely deployed. The focus should be on building your data governance, security baseline, and POPIA compliance framework before introducing any AI tools.",
+    pill: { text: "Foundation Stage", bg: "#FADBD8", color: "#A33020" },
+    color: "#C0392B"
+  };
+  if (score <= 65) return {
+    name: "Developing Stage",
+    desc: "You have a reasonable foundation but key gaps remain. A controlled AI pilot in a sandboxed, low-risk environment may be possible, but broader deployment requires addressing the identified gaps first.",
+    pill: { text: "Developing Stage", bg: "#FDEBD0", color: "#B7720A" },
+    color: "#E67E22"
+  };
+  if (score <= 85) return {
+    name: "Ready Stage",
+    desc: "You have a strong foundation and are ready for structured AI implementation. Linktank can help you scope and prioritise your AI use cases and guide a safe, compliant deployment.",
+    pill: { text: "Ready Stage", bg: "#D5F5E3", color: "#1A7A4E" },
+    color: "#27AE60"
+  };
+  return {
+    name: "Advanced Stage",
+    desc: "Your practice is operating at a high level of technology and governance maturity. You can move quickly into AI deployment and explore more sophisticated, customised AI applications.",
+    pill: { text: "Advanced Stage", bg: "#A9DFBF", color: "#1A7A4E" },
+    color: "#1A7A4E"
+  };
+}
+
+function getNextSteps(overall, domainScores) {
+  if (overall <= 40) return {
+    title: "Foundation Pathway — Build Before You Deploy",
+    steps: [
+      "Register an Information Officer with the Information Regulator and establish a POPIA compliance framework before any AI deployment.",
+      "Centralise all client data into approved, managed systems. Eliminate shadow data stores (WhatsApp, personal email, USB drives).",
+      "Implement Multi-Factor Authentication (MFA) across all staff accounts immediately — this is non-negotiable.",
+      "Engage a Managed IT Service Provider to establish a baseline security posture and managed endpoint protection.",
+      "Draft and communicate an Acceptable Use Policy that explicitly prohibits unsanctioned AI tool usage.",
+      "Engage Linktank for a Data Governance Foundation engagement before revisiting AI readiness in 6 months."
+    ]
+  };
+  if (overall <= 65) return {
+    title: "Developing Pathway — Address Gaps, Then Pilot",
+    steps: [
+      "Focus remediation effort on your two or three lowest-scoring domains identified in this report.",
+      "Formalise the data classification framework and apply it to all client data categories.",
+      "Review client consent agreements to ensure they address technology processing and third-party data sharing.",
+      "Identify two or three high-value, low-risk AI use cases for a controlled pilot — start with internal documents, not client data.",
+      "Engage Linktank for an AI Roadmap & Architecture Design engagement to plan a safe implementation pathway.",
+      "Schedule a follow-up assessment in 3–6 months to track improvement."
+    ]
+  };
+  if (overall <= 85) return {
+    title: "Ready Pathway — Structured Implementation",
+    steps: [
+      "Engage Linktank to scope and prioritise AI use cases based on your identified process improvements.",
+      "Proceed with Microsoft Copilot for M365 if on Business Premium, or Azure OpenAI for more customised applications.",
+      "Run a structured 90-day pilot with defined success metrics and a dedicated AI champion.",
+      "Develop staff AI training materials and formalise your AI governance documentation.",
+      "Establish a quarterly AI governance review cycle to stay ahead of regulatory developments.",
+      "Schedule a follow-up assessment in 6 months to measure progress and expand use cases."
+    ]
+  };
+  return {
+    title: "Advanced Pathway — Accelerate & Expand",
+    steps: [
+      "Move directly into AI implementation across your prioritised use cases with Linktank support.",
+      "Explore Azure OpenAI Service for custom model deployments tailored to your practice's specific knowledge base.",
+      "Consider more sophisticated applications: AI-assisted financial planning, automated compliance monitoring, intelligent client segmentation.",
+      "Establish an AI governance committee to oversee AI ethics, data use, and emerging regulatory developments.",
+      "Position your practice as an early adopter — this is a significant competitive differentiator in the IFA market.",
+      "Explore how Linktank's Power BI + AI integration can enhance your practice intelligence capabilities."
+    ]
+  };
+}
+
+function getTrafficLights(domainScores) {
+  const items = [];
+  domains.forEach(d => {
+    const pct = domainScores[d.num].pct;
+    let status = pct >= 65 ? 'green' : pct >= 40 ? 'amber' : 'red';
+    let label = pct >= 65 ? 'On Track' : pct >= 40 ? 'Needs Attention' : 'Critical Gap';
+    items.push({ name: d.title, status, label, pct });
+  });
+  return items;
+}
+
+// ═══════════════════════════════════════════════════
+// REPORT GENERATION
+// ═══════════════════════════════════════════════════
+function generateReport() {
+  // Validate
+  const practiceName = document.getElementById('practiceName').value.trim();
+  const completedBy = document.getElementById('completedBy').value.trim();
+  if (!practiceName || !completedBy || Object.keys(answers).length < 29) {
+    document.getElementById('validationMsg').style.display = 'block';
+    return;
+  }
+  document.getElementById('validationMsg').style.display = 'none';
+
+  const { domainScores, overall } = calcScores();
+  const band = getBand(overall);
+  const nextSteps = getNextSteps(overall, domainScores);
+  const trafficLights = getTrafficLights(domainScores);
+
+  // Populate report header
+  document.getElementById('reportPracticeName').textContent = practiceName;
+  const date = document.getElementById('assessDate').value || new Date().toLocaleDateString('en-ZA');
+  const fsp = document.getElementById('fspNumber').value;
+  const consultant = document.getElementById('consultant').value;
+  document.getElementById('reportMeta').textContent =
+    `Completed by ${completedBy}${fsp ? ' | FSP ' + fsp : ''}${consultant ? ' | Consultant: ' + consultant : ''} | ${date}`;
+
+  // Score dial animation
+  const circumference = 408.41;
+  const offset = circumference - (overall / 100) * circumference;
+  setTimeout(() => {
+    document.getElementById('dialCircle').style.strokeDashoffset = offset;
+    document.getElementById('dialCircle').style.transition = 'stroke-dashoffset 1.5s ease';
+    document.getElementById('dialCircle').style.stroke = band.color;
+  }, 300);
+  // Animate number
+  let count = 0;
+  const target = overall;
+  const interval = setInterval(() => {
+    count = Math.min(count + 2, target);
+    document.getElementById('dialScore').textContent = count;
+    if (count >= target) clearInterval(interval);
+  }, 20);
+
+  // Band info
+  document.getElementById('bandName').textContent = band.name;
+  document.getElementById('bandName').style.color = band.color;
+  document.getElementById('bandDesc').textContent = band.desc;
+  const pill = document.getElementById('bandPill');
+  pill.textContent = band.pill.text;
+  pill.style.background = band.pill.bg;
+  pill.style.color = band.pill.color;
+
+  // Domain breakdown
+  const breakdownEl = document.getElementById('domainBreakdown');
+  breakdownEl.innerHTML = '';
+  const barColors = ['#0B7285','#12A6C2','#1B3A6B','#27AE60','#E67E22','#8E44AD'];
+  domains.forEach((d, i) => {
+    const ds = domainScores[d.num];
+    const pct = ds.pct;
+    const barColor = pct >= 65 ? '#27AE60' : pct >= 40 ? '#E67E22' : '#C0392B';
+    const card = document.createElement('div');
+    card.className = 'domain-result-card';
+    card.innerHTML = `
+      <div class="domain-result-top">
+        <div>
+          <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.2rem;">Domain ${d.num} · ${d.weight}% weight</div>
+          <div class="domain-result-name">${d.title}</div>
+        </div>
+        <div class="domain-result-score" style="color:${barColor}">${pct}%</div>
+      </div>
+      <div class="domain-bar">
+        <div class="domain-bar-fill" style="width:0%;background:${barColor};transition:width 1.2s ease ${i*0.15}s" data-target="${pct}"></div>
+      </div>
+      <div class="domain-result-meta">Raw score: ${ds.raw} / ${ds.max} · Weighted contribution: ${(ds.weighted).toFixed(1)}% of total</div>
+    `;
+    breakdownEl.appendChild(card);
+  });
+
+  // Traffic lights
+  const trafficEl = document.getElementById('trafficGrid');
+  trafficEl.innerHTML = '';
+  trafficLights.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'traffic-item';
+    div.innerHTML = `
+      <div class="traffic-dot ${item.status}"></div>
+      <div class="traffic-label">${item.name}</div>
+      <div class="traffic-desc">${item.pct}% — ${item.label}</div>
+    `;
+    trafficEl.appendChild(div);
+  });
+
+  // Next steps
+  document.getElementById('nextStepsTitle').textContent = nextSteps.title;
+  const stepsList = document.getElementById('nextStepsList');
+  stepsList.innerHTML = '';
+  nextSteps.steps.forEach((step, i) => {
+    const div = document.createElement('div');
+    div.className = 'next-step-item';
+    div.innerHTML = `<div class="step-icon">${i+1}</div><div class="step-text">${step}</div>`;
+    stepsList.appendChild(div);
+  });
+
+  // Show report
+  document.getElementById('questionnaire').style.display = 'none';
+  document.getElementById('report').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Animate bars after render
+  setTimeout(() => {
+    document.querySelectorAll('.domain-bar-fill').forEach(el => {
+      el.style.width = el.dataset.target + '%';
+    });
+  }, 200);
+}
+
+function restartAssessment() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.getElementById('report').style.display = 'none';
+  document.getElementById('questionnaire').style.display = 'block';
+  document.querySelectorAll('.score-opt').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.question-card').forEach(el => el.classList.remove('answered'));
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+
+document.getElementById('assessDate').valueAsDate = new Date();
+buildQuestionnaire();
+</script>
+</body>
+</html>
